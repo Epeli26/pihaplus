@@ -1395,33 +1395,29 @@
 
                 <div class="contact-form-container">
                     <h3>Lähetä Viesti</h3>
-                    <form id="contact-form" action="https://formsubmit.co/eliaspartanen6@gmail.com" method="POST">
+                    <form id="contact-form">
                         <div class="form-grid">
                             <div class="form-group">
                                 <label class="form-label">Nimi *</label>
-                                <input type="text" name="Nimi" class="form-control" required placeholder="Matti Meikäläinen">
+                                <input type="text" id="f-nimi" class="form-control" required placeholder="Matti Meikäläinen">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Puhelinnumero *</label>
-                                <input type="tel" name="Puhelinnumero" class="form-control" required placeholder="+358 401997633">
+                                <input type="tel" id="f-puhelin" class="form-control" required placeholder="+358 401997633">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Sähköposti</label>
-                                <input type="email" name="Sahkoposti" class="form-control" placeholder="matti@esimerkki.fi">
+                                <input type="email" id="f-email" class="form-control" placeholder="matti@esimerkki.fi">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Pihan koko (m²)</label>
-                                <input type="number" name="Pihan_koko_m2" class="form-control" placeholder="esim. 850">
+                                <input type="number" id="f-koko" class="form-control" placeholder="esim. 850">
                             </div>
                             <div class="form-group full-width">
                                 <label class="form-label">Viesti / Lisätiedot</label>
-                                <textarea name="Viesti" class="form-control" placeholder="Kuvaile pihasi tarpeita..."></textarea>
+                                <textarea id="f-viesti" class="form-control" placeholder="Kuvaile pihasi tarpeita..."></textarea>
                             </div>
                         </div>
-                        <input type="hidden" name="_captcha" value="false">
-                        <input type="hidden" name="_template" value="table">
-                        <input type="hidden" name="_subject" value="Uusi tarjouspyyntö Piha+ sivustolta!">
-                        <input type="hidden" name="_next" value="https://epeli26.github.io/pihaplus/">
                         <button type="submit" class="btn btn-primary">Lähetä Pyyntö</button>
                         <div id="form-msg" class="submit-msg"></div>
                     </form>
@@ -1642,13 +1638,45 @@
             // Initial calculation
             updateCalculator();
 
-            // 6. Form Submission (Standard POST to FormSubmit)
+            // 6. Form Submission (mailto: - works immediately, no backend needed)
             const contactForm = document.getElementById('contact-form');
+            const formMsg = document.getElementById('form-msg');
 
             contactForm.addEventListener('submit', function(e) {
-                const btn = this.querySelector('button[type="submit"]');
-                btn.innerHTML = '<span class="spinner"></span> Lähetetään...';
-                // Browser will now naturally submit the form and redirect to FormSubmit
+                e.preventDefault();
+
+                const nimi    = document.getElementById('f-nimi').value.trim();
+                const puhelin = document.getElementById('f-puhelin').value.trim();
+                const email   = document.getElementById('f-email').value.trim();
+                const koko    = document.getElementById('f-koko').value.trim();
+                const viesti  = document.getElementById('f-viesti').value.trim();
+
+                if (!nimi || !puhelin) {
+                    formMsg.className = 'submit-msg';
+                    formMsg.style.backgroundColor = '#ffcccc';
+                    formMsg.style.color = '#cc0000';
+                    formMsg.style.display = 'block';
+                    formMsg.innerHTML = '❌ Täytä ainakin nimi ja puhelinnumero.';
+                    return;
+                }
+
+                const body = `Uusi tarjouspyyntö Piha+ verkkosivulta!%0A%0A`
+                    + `Nimi: ${encodeURIComponent(nimi)}%0A`
+                    + `Puhelin: ${encodeURIComponent(puhelin)}%0A`
+                    + (email ? `Sähköposti: ${encodeURIComponent(email)}%0A` : '')
+                    + (koko  ? `Pihan koko: ${encodeURIComponent(koko)} m\u00b2%0A` : '')
+                    + (viesti ? `%0AViesti:%0A${encodeURIComponent(viesti)}` : '');
+
+                window.location.href = `mailto:eliaspartanen6@gmail.com?subject=${encodeURIComponent('Uusi tarjouspyyntö Piha+ sivustolta!')}&body=${body}`;
+
+                contactForm.reset();
+                formMsg.className = 'submit-msg success';
+                formMsg.style.backgroundColor = '';
+                formMsg.style.color = '';
+                formMsg.style.display = 'block';
+                formMsg.innerHTML = '✅ <strong>Kiitos!</strong> Sähköpostiohjelma avautuu — lähetä viesti siellä.';
+
+                setTimeout(() => { formMsg.style.display = 'none'; }, 6000);
             });
         });
     </script>
