@@ -1421,6 +1421,7 @@
                         <input type="hidden" name="_captcha" value="false">
                         <input type="hidden" name="_template" value="table">
                         <input type="hidden" name="_subject" value="Uusi tarjouspyyntö Piha+ sivustolta!">
+                        <input type="hidden" name="_next" value="https://epeli26.github.io/pihaplus/">
                         <button type="submit" class="btn btn-primary">Lähetä Pyyntö</button>
                         <div id="form-msg" class="submit-msg"></div>
                     </form>
@@ -1641,47 +1642,13 @@
             // Initial calculation
             updateCalculator();
 
-            // 6. Form Submission (AJAX to FormSubmit)
+            // 6. Form Submission (Standard POST to FormSubmit)
             const contactForm = document.getElementById('contact-form');
-            const formMsg = document.getElementById('form-msg');
 
             contactForm.addEventListener('submit', function(e) {
-                e.preventDefault();
                 const btn = this.querySelector('button[type="submit"]');
-                const originalText = btn.textContent;
-                
                 btn.innerHTML = '<span class="spinner"></span> Lähetetään...';
-                btn.disabled = true;
-                
-                const formData = new FormData(contactForm);
-                
-                fetch("https://formsubmit.co/ajax/eliaspartanen6@gmail.com", {
-                    method: "POST",
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    contactForm.reset();
-                    btn.textContent = originalText;
-                    btn.disabled = false;
-                    
-                    formMsg.className = 'submit-msg success';
-                    formMsg.innerHTML = '✅ <strong>Kiitos!</strong> Viestisi on lähetetty onnistuneesti.';
-                    formMsg.style.display = 'block';
-                    
-                    setTimeout(() => {
-                        formMsg.style.display = 'none';
-                    }, 5000);
-                })
-                .catch(error => {
-                    btn.textContent = originalText;
-                    btn.disabled = false;
-                    formMsg.className = 'submit-msg';
-                    formMsg.style.backgroundColor = '#ffcccc';
-                    formMsg.style.color = '#cc0000';
-                    formMsg.innerHTML = '❌ <strong>Virhe!</strong> Viestin lähetys epäonnistui. Yritä uudelleen.';
-                    formMsg.style.display = 'block';
-                });
+                // Browser will now naturally submit the form and redirect to FormSubmit
             });
         });
     </script>
