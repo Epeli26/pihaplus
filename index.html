@@ -1427,28 +1427,28 @@
                         <h4>Valitse lisäpalvelut</h4>
                         <div class="addons-grid">
                             <label class="addon-checkbox">
-                                <input type="checkbox" class="addon-input" value="12">
+                                <input type="checkbox" class="addon-input" value="8">
                                 <span class="checkmark"></span>
                                 <span class="addon-label">✂️ Reunojen siistiminen</span>
+                                <span class="addon-price">+8 €</span>
+                            </label>
+                            <label class="addon-checkbox">
+                                <input type="checkbox" class="addon-input" value="12">
+                                <span class="checkmark"></span>
+                                <span class="addon-label">♻️ Jätteen poiskuljetus</span>
                                 <span class="addon-price">+12 €</span>
                             </label>
                             <label class="addon-checkbox">
                                 <input type="checkbox" class="addon-input" value="18">
                                 <span class="checkmark"></span>
-                                <span class="addon-label">♻️ Jätteen poiskuljetus</span>
+                                <span class="addon-label">📅 Tiheämpi ohjelma (vko)</span>
                                 <span class="addon-price">+18 €</span>
                             </label>
                             <label class="addon-checkbox">
                                 <input type="checkbox" class="addon-input" value="25">
                                 <span class="checkmark"></span>
-                                <span class="addon-label">📅 Tiheämpi ohjelma (vko)</span>
-                                <span class="addon-price">+25 €</span>
-                            </label>
-                            <label class="addon-checkbox">
-                                <input type="checkbox" class="addon-input" value="35">
-                                <span class="checkmark"></span>
                                 <span class="addon-label">🌳 Pensasaitojen leikkaus</span>
-                                <span class="addon-price">+35 €</span>
+                                <span class="addon-price">+25 €</span>
                             </label>
                         </div>
                     </div>
@@ -1811,11 +1811,11 @@
 
             function calculateBasePrice(area) {
                 const brackets = [
-                    { min: 50, max: 200, minP: 25, maxP: 40, label: "Pieni piha" },
-                    { min: 201, max: 500, minP: 40, maxP: 75, label: "Keskikokoinen piha" },
-                    { min: 501, max: 1000, minP: 75, maxP: 130, label: "Suuri piha" },
-                    { min: 1001, max: 2000, minP: 130, maxP: 200, label: "Hyvin suuri piha" },
-                    { min: 2001, max: 3000, minP: 200, maxP: 300, label: "Maatilan kokoluokka" }
+                    { min: 50, max: 200, minP: 15, maxP: 30, label: "Pieni piha" },
+                    { min: 201, max: 500, minP: 30, maxP: 55, label: "Keskikokoinen piha" },
+                    { min: 501, max: 1000, minP: 55, maxP: 95, label: "Suuri piha" },
+                    { min: 1001, max: 2000, minP: 95, maxP: 150, label: "Hyvin suuri piha" },
+                    { min: 2001, max: 3000, minP: 150, maxP: 220, label: "Maatilan kokoluokka" }
                 ];
 
                 for (let b of brackets) {
@@ -1825,7 +1825,7 @@
                         return { price: price, label: b.label };
                     }
                 }
-                return { price: 300, label: "Maatilan kokoluokka" };
+                return { price: 220, label: "Maatilan kokoluokka" };
             }
 
             function updateCalculator() {
