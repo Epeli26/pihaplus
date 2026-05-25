@@ -1418,7 +1418,7 @@
                                 <textarea id="f-viesti" class="form-control" placeholder="Kuvaile pihasi tarpeita..."></textarea>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary">Lähetä Pyyntö</button>
+                        <button type="submit" id="form-btn" class="btn btn-primary">Lähetä Pyyntö</button>
                         <div id="form-msg" class="submit-msg"></div>
                     </form>
                 </div>
@@ -1638,43 +1638,65 @@
             // Initial calculation
             updateCalculator();
 
-            // 6. Form Submission (mailto: - works immediately, no backend needed)
+            // 6. Form Submission (Web3Forms AJAX - sends directly to email)
             const contactForm = document.getElementById('contact-form');
             const formMsg = document.getElementById('form-msg');
 
-            contactForm.addEventListener('submit', function(e) {
+            contactForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
 
+                const btn = document.getElementById('form-btn') || this.querySelector('button[type="submit"]');
                 const nimi    = document.getElementById('f-nimi').value.trim();
                 const puhelin = document.getElementById('f-puhelin').value.trim();
                 const email   = document.getElementById('f-email').value.trim();
                 const koko    = document.getElementById('f-koko').value.trim();
                 const viesti  = document.getElementById('f-viesti').value.trim();
 
-                if (!nimi || !puhelin) {
+                const originalText = btn.textContent;
+                btn.innerHTML = '<span class="spinner"></span> Lähetetään...';
+                btn.disabled = true;
+
+                const data = {
+                    access_key: 'c1948d51-69c7-4e54-a7d5-8f501e24575f',
+                    subject: 'Uusi tarjouspyyntö Piha+ sivustolta!',
+                    name: nimi,
+                    Puhelinnumero: puhelin,
+                    Sähköposti: email || 'Ei annettu',
+                    'Pihan koko (m\u00b2)': koko || 'Ei annettu',
+                    Viesti: viesti || 'Ei viestiaa',
+                    from_name: 'Piha+ Verkkosivusto'
+                };
+
+                try {
+                    const res = await fetch('https://api.web3forms.com/submit', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+                    const json = await res.json();
+
+                    btn.textContent = originalText;
+                    btn.disabled = false;
+
+                    if (json.success) {
+                        contactForm.reset();
+                        formMsg.className = 'submit-msg success';
+                        formMsg.style.backgroundColor = '';
+                        formMsg.style.color = '';
+                        formMsg.style.display = 'block';
+                        formMsg.innerHTML = '✅ <strong>Kiitos!</strong> Viestisi on lähetetty onnistuneesti. Otamme yhteyttä pian!';
+                    } else {
+                        throw new Error(json.message);
+                    }
+                } catch (err) {
+                    btn.textContent = originalText;
+                    btn.disabled = false;
                     formMsg.className = 'submit-msg';
                     formMsg.style.backgroundColor = '#ffcccc';
                     formMsg.style.color = '#cc0000';
                     formMsg.style.display = 'block';
-                    formMsg.innerHTML = '❌ Täytä ainakin nimi ja puhelinnumero.';
-                    return;
+                    formMsg.innerHTML = '❌ <strong>Virhe!</strong> Lähetys epäonnistui. Yritä uudelleen tai soita meille.';
                 }
-
-                const body = `Uusi tarjouspyyntö Piha+ verkkosivulta!%0A%0A`
-                    + `Nimi: ${encodeURIComponent(nimi)}%0A`
-                    + `Puhelin: ${encodeURIComponent(puhelin)}%0A`
-                    + (email ? `Sähköposti: ${encodeURIComponent(email)}%0A` : '')
-                    + (koko  ? `Pihan koko: ${encodeURIComponent(koko)} m\u00b2%0A` : '')
-                    + (viesti ? `%0AViesti:%0A${encodeURIComponent(viesti)}` : '');
-
-                window.location.href = `mailto:eliaspartanen6@gmail.com?subject=${encodeURIComponent('Uusi tarjouspyyntö Piha+ sivustolta!')}&body=${body}`;
-
-                contactForm.reset();
-                formMsg.className = 'submit-msg success';
-                formMsg.style.backgroundColor = '';
-                formMsg.style.color = '';
-                formMsg.style.display = 'block';
-                formMsg.innerHTML = '✅ <strong>Kiitos!</strong> Sähköpostiohjelma avautuu — lähetä viesti siellä.';
 
                 setTimeout(() => { formMsg.style.display = 'none'; }, 6000);
             });
