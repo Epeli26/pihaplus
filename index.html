@@ -1324,28 +1324,38 @@
         <div class="container">
             <div class="section-header fade-in">
                 <h2>Mitä Asiakkaat Sanovat</h2>
-                <p class="section-subtitle">Lue mitä paikalliset asukkaat ajattelevat palvelustamme.</p>
+                <p class="section-subtitle">Jätä oma arvostelusi tai lue mitä muut ovat mieltä palvelustamme.</p>
             </div>
 
-            <div class="reviews-grid">
-                <div class="review-card fade-in">
-                    <div class="quote-icon">"</div>
-                    <div class="stars">⭐⭐⭐⭐⭐</div>
-                    <p class="review-text">"Todella nopea ja siisti työ! Piha näyttää upealta. Suosittelen lämpimästi!"</p>
-                    <p class="review-author">— Matti K., Kuopio</p>
-                </div>
-                <div class="review-card fade-in" style="transition-delay: 150ms;">
-                    <div class="quote-icon">"</div>
-                    <div class="stars">⭐⭐⭐⭐⭐</div>
-                    <p class="review-text">"Sovittu aika piti täydellisesti ja hinta oli juuri arvion mukainen. Tulevat varmasti uudelleen!"</p>
-                    <p class="review-author">— Tiina R., Kiuruvesi</p>
-                </div>
-                <div class="review-card fade-in" style="transition-delay: 300ms;">
-                    <div class="quote-icon">"</div>
-                    <div class="stars">⭐⭐⭐⭐⭐</div>
-                    <p class="review-text">"Paras paikallinen palvelu! Reunat leikattu siististi ja jätteet vietiin mukana. 10/10."</p>
-                    <p class="review-author">— Jukka H., Lapinlahti</p>
-                </div>
+            <div class="review-form-container fade-in" style="margin-bottom: 50px; background: rgba(255, 255, 255, 0.05); padding: 40px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1); max-width: 600px; margin-left: auto; margin-right: auto;">
+                <h3 style="color: white; margin-bottom: 20px; text-align: center;">Jätä arvostelu</h3>
+                <form id="review-form">
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <label style="color: white; display: block; margin-bottom: 5px; font-weight: 500;">Nimesi *</label>
+                        <input type="text" id="r-nimi" class="form-control" required placeholder="Nimi" style="background: #fff;">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <label style="color: white; display: block; margin-bottom: 5px; font-weight: 500;">Arvosana *</label>
+                        <select id="r-arvosana" class="form-control" required style="background: #fff; cursor: pointer;">
+                            <option value="5">⭐⭐⭐⭐⭐ (5/5)</option>
+                            <option value="4">⭐⭐⭐⭐ (4/5)</option>
+                            <option value="3">⭐⭐⭐ (3/5)</option>
+                            <option value="2">⭐⭐ (2/5)</option>
+                            <option value="1">⭐ (1/5)</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label style="color: white; display: block; margin-bottom: 5px; font-weight: 500;">Arvostelu *</label>
+                        <textarea id="r-teksti" class="form-control" required placeholder="Kirjoita arvostelusi tähän..." style="background: #fff; min-height: 100px;"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Julkaise Arvostelu</button>
+                    <div id="review-msg" class="submit-msg"></div>
+                </form>
+            </div>
+
+            <div id="no-reviews-msg" style="color: white; text-align: center; font-style: italic; display: none;">Ei vielä arvosteluja. Ole ensimmäinen ja jätä arvostelu!</div>
+            <div class="reviews-grid" id="reviews-container">
+                <!-- Arvostelut tulevat tähän JavaScriptillä -->
             </div>
         </div>
     </section>
@@ -1469,7 +1479,24 @@
     <!-- ==========================================================================
          JAVASCRIPT
          ========================================================================== -->
-    <script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getDatabase, ref, push, onValue, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+        // Initialize Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyAXlLDGZ2pj2ToZcXM6ywHE-zJvDfMOuik",
+            authDomain: "pihaplus.firebaseapp.com",
+            databaseURL: "https://pihaplus-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "pihaplus",
+            storageBucket: "pihaplus.firebasestorage.app",
+            messagingSenderId: "705633297834",
+            appId: "1:705633297834:web:e287b9e5cefc7d1265b7d3",
+            measurementId: "G-ERVSX4FJDK"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
         document.addEventListener('DOMContentLoaded', () => {
             
             // 1. Mobile Menu Toggle
@@ -1700,6 +1727,107 @@
 
                 setTimeout(() => { formMsg.style.display = 'none'; }, 6000);
             });
+
+            // 7. Review System Logic (Firebase Realtime Database)
+            const reviewForm = document.getElementById('review-form');
+            const reviewsContainer = document.getElementById('reviews-container');
+            const noReviewsMsg = document.getElementById('no-reviews-msg');
+            const reviewMsg = document.getElementById('review-msg');
+
+            const reviewsRef = ref(db, 'reviews');
+
+            // Listen for reviews from Firebase
+            onValue(reviewsRef, (snapshot) => {
+                reviewsContainer.innerHTML = '';
+                const data = snapshot.val();
+                
+                if (!data) {
+                    noReviewsMsg.style.display = 'block';
+                } else {
+                    noReviewsMsg.style.display = 'none';
+                    
+                    // Convert object to array and sort by newest first
+                    const reviewsList = Object.values(data).sort((a, b) => {
+                        const timeA = a.timestamp || 0;
+                        const timeB = b.timestamp || 0;
+                        return timeB - timeA;
+                    });
+                    
+                    reviewsList.forEach((review, index) => {
+                        const stars = '⭐'.repeat(parseInt(review.rating) || 5);
+                        const delay = (index % 3) * 150; 
+                        
+                        const reviewCard = document.createElement('div');
+                        reviewCard.className = 'review-card fade-in visible';
+                        reviewCard.style.transitionDelay = `${delay}ms`;
+                        
+                        // Sanitize input basics
+                        const safeText = review.text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                        const safeName = review.name.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                        
+                        reviewCard.innerHTML = `
+                            <div class="quote-icon">"</div>
+                            <div class="stars">${stars}</div>
+                            <p class="review-text">"${safeText}"</p>
+                            <p class="review-author">— ${safeName}</p>
+                        `;
+                        
+                        reviewsContainer.appendChild(reviewCard);
+                    });
+                }
+            });
+
+            if (reviewForm) {
+                reviewForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    
+                    const nameInput = document.getElementById('r-nimi');
+                    const ratingInput = document.getElementById('r-arvosana');
+                    const textInput = document.getElementById('r-teksti');
+                    const submitBtn = reviewForm.querySelector('button[type="submit"]');
+                    
+                    const name = nameInput.value.trim();
+                    const rating = ratingInput.value;
+                    const text = textInput.value.trim();
+                    
+                    if (name && rating && text) {
+                        submitBtn.disabled = true;
+                        submitBtn.textContent = 'Lähetetään...';
+                        
+                        const newReview = {
+                            name: name,
+                            rating: parseInt(rating),
+                            text: text,
+                            timestamp: serverTimestamp() // Set by Firebase server
+                        };
+                        
+                        try {
+                            await push(reviewsRef, newReview);
+                            
+                            // Reset form & show success
+                            reviewForm.reset();
+                            reviewMsg.className = 'submit-msg success';
+                            reviewMsg.style.display = 'block';
+                            reviewMsg.style.backgroundColor = 'rgba(106, 191, 62, 0.1)';
+                            reviewMsg.style.color = 'white';
+                            reviewMsg.style.border = '1px solid var(--accent)';
+                            reviewMsg.innerHTML = '✅ Arvostelu julkaistu onnistuneesti!';
+                            
+                            setTimeout(() => { reviewMsg.style.display = 'none'; }, 4000);
+                        } catch (error) {
+                            console.error("Error adding review: ", error);
+                            reviewMsg.className = 'submit-msg';
+                            reviewMsg.style.display = 'block';
+                            reviewMsg.style.backgroundColor = '#ffcccc';
+                            reviewMsg.style.color = '#cc0000';
+                            reviewMsg.innerHTML = '❌ Virhe arvostelun lähetyksessä. Yritä myöhemmin uudelleen.';
+                        } finally {
+                            submitBtn.disabled = false;
+                            submitBtn.textContent = 'Julkaise Arvostelu';
+                        }
+                    }
+                });
+            }
         });
     </script>
 </body>
