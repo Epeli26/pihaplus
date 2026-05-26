@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tietosuojaseloste - Piha+</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a4d2e;
+            --accent: #6abf3e;
+            --bg-light: #ffffff;
+            --bg-alt: #f5f7f4;
+            --text-dark: #1c1c1c;
+            --text-light: #666666;
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'DM Sans', sans-serif;
+            --border-radius: 12px;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--text-dark);
+            line-height: 1.6;
+            background-color: var(--bg-alt);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .policy-card {
+            background: #fff;
+            padding: 40px 50px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        h1, h2, h3 {
+            font-family: var(--font-heading);
+            color: var(--primary);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-top: 0;
+            margin-bottom: 5px;
+        }
+        
+        h2 {
+            font-size: 1.5rem;
+            border-bottom: 2px solid var(--bg-alt);
+            padding-bottom: 10px;
+            margin-top: 2rem;
+        }
+
+        .meta-info {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 40px;
+        }
+
+        p, li {
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+
+        ul {
+            margin-top: 0;
+            padding-left: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: #fff;
+        }
+
+        th, td {
+            border: 1px solid #e0e0e0;
+            padding: 12px 15px;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--bg-alt);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: var(--accent);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 600px) {
+            .policy-card { padding: 25px; }
+            th, td { padding: 10px; font-size: 0.9rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link">← Palaa etusivulle</a>
+        
+        <div class="policy-card">
+            <h1>Tietosuojaseloste</h1>
+            <div class="meta-info">
+                PihaPlus | Laadittu: 26.5.2025
+            </div>
+
+            <h2>1. Rekisterinpitäjä</h2>
+            <p>
+                <strong>Yritys:</strong> PihaPlus<br>
+                <strong>Verkkosivusto:</strong> <a href="https://pihaplus-two.vercel.app/">https://pihaplus-two.vercel.app/</a><br>
+                <strong>Sähköposti:</strong> eliaspartanen6@gmail.com
+            </p>
+
+            <h2>2. Tietosuojavastaava</h2>
+            <p>Rekisterinpitäjä vastaa tietosuoja-asioista itse. Tietosuojaan liittyvät yhteydenotot: eliaspartanen6@gmail.com</p>
+
+            <h2>3. Henkilötietojen käsittelyn tarkoitus ja oikeusperuste</h2>
+            <p>Käsittelemme henkilötietoja seuraaviin tarkoituksiin:</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tarkoitus</th>
+                        <th>Oikeusperuste (GDPR Art.)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Yhteydenottopyyntöihin vastaaminen</td>
+                        <td>Oikeutettu etu (Art. 6(1)(f)) tai sopimuksen täyttäminen (Art. 6(1)(b))</td>
+                    </tr>
+                    <tr>
+                        <td>Asiakasviestintä</td>
+                        <td>Oikeutettu etu (Art. 6(1)(f))</td>
+                    </tr>
+                    <tr>
+                        <td>Tarjouspyyntöjen käsittely</td>
+                        <td>Sopimuksen täyttäminen (Art. 6(1)(b))</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>4. Kerättävät henkilötiedot</h2>
+            <p>Yhteydenottolomakkeen kautta keräämme seuraavat tiedot:</p>
+            <ul>
+                <li><strong>Nimi</strong> – henkilöllisyyden tunnistamiseksi</li>
+                <li><strong>Sähköpostiosoite</strong> – vastausta varten</li>
+                <li><strong>Puhelinnumero</strong> – yhteydenottoa varten</li>
+            </ul>
+            <p>Emme kerää arkaluonteisia henkilötietoja (kuten terveystietoja, etnistä alkuperää tai poliittisia mielipiteitä).</p>
+
+            <h2>5. Tietojen säilyttämisaika</h2>
+            <p>Henkilötietoja säilytetään enintään 2 vuotta yhteydenoton jälkeen, ellei asiakassuhde tai lakisääteinen velvoite edellytä pidempää säilytysaikaa. Tietojen poistoa voi pyytää milloin tahansa (katso kohta 8).</p>
+
+            <h2>6. Tietojen vastaanottajat ja luovutukset</h2>
+            <p>Henkilötietoja ei myydä, vuokrata eikä luovuteta kolmansille osapuolille kaupallisiin tarkoituksiin.<br>
+            Tietoja voidaan siirtää seuraaville tahoille vain palvelun tuottamiseksi:</p>
+            <ul>
+                <li><strong>Vercel Inc.</strong> (verkkosivuston hosting-palvelu) – käsittelee teknisesti sivuston kautta lähetettyjä tietoja</li>
+            </ul>
+            <p>Vercel sijaitsee EU/ETA-alueen ulkopuolella (USA). Siirto perustuu Euroopan komission hyväksymiin vakiosopimuslausekkeisiin (SCC, Art. 46 GDPR) ja EU–US Data Privacy Framework -järjestelyyn.</p>
+
+            <h2>7. Tietoturva</h2>
+            <p>Suojaamme henkilötietosi asianmukaisin teknisin ja organisatorisin toimenpitein:</p>
+            <ul>
+                <li>Sivusto käyttää HTTPS-salattua yhteyttä</li>
+                <li>Pääsy tietoihin on rajattu vain niitä tarvitseville henkilöille</li>
+                <li>Tietoja ei tallenneta tarpeettomasti</li>
+            </ul>
+
+            <h2>8. Rekisteröidyn oikeudet (GDPR Art. 15–22)</h2>
+            <p>Sinulla on seuraavat oikeudet henkilötietojesi suhteen:</p>
+            <ul>
+                <li><strong>Tarkastusoikeus (Art. 15)</strong> – oikeus saada tietää, mitä tietoja sinusta on tallennettu</li>
+                <li><strong>Oikaisupyyntö (Art. 16)</strong> – oikeus pyytää virheellisten tietojen korjaamista</li>
+                <li><strong>Poisto-oikeus (Art. 17)</strong> – oikeus pyytää tietojesi poistamista ("oikeus tulla unohdetuksi")</li>
+                <li><strong>Käsittelyn rajoittaminen (Art. 18)</strong> – oikeus pyytää tietojesi käsittelyn rajoittamista</li>
+                <li><strong>Siirto-oikeus (Art. 20)</strong> – oikeus saada tietosi koneluettavassa muodossa</li>
+                <li><strong>Vastustamisoikeus (Art. 21)</strong> – oikeus vastustaa tietojesi käsittelyä oikeutetun edun perusteella</li>
+                <li><strong>Suostumuksen peruuttaminen (Art. 7)</strong> – mikäli käsittely perustuu suostumukseen, voit peruuttaa sen milloin tahansa</li>
+            </ul>
+            <p>Pyyntöjen käsittelyaika on enintään 30 päivää. Ota yhteyttä: eliaspartanen6@gmail.com</p>
+
+            <h2>9. Oikeus tehdä valitus valvontaviranomaiselle</h2>
+            <p>Sinulla on oikeus tehdä valitus tietosuojavaltuutetulle, jos katsot, että henkilötietojasi on käsitelty lainvastaisesti.</p>
+            <p>
+                <strong>Tietosuojavaltuutetun toimisto</strong><br>
+                Käyntiosoite: Lintulahdenkuja 4, 00530 Helsinki<br>
+                Puhelin: 029 566 6700<br>
+                Verkkosivusto: <a href="https://tietosuoja.fi" target="_blank" rel="noopener noreferrer">tietosuoja.fi</a>
+            </p>
+
+            <h2>10. Evästeet ja seuranta</h2>
+            <p>Sivusto voi käyttää teknisiä evästeitä, jotka ovat välttämättömiä sivuston toiminnan kannalta. Nämä eivät edellytä suostumusta. Kolmannen osapuolen seuranta- tai markkinointievästeitä ei käytetä ilman erillistä suostumustasi.</p>
+
+            <h2>11. Muutokset tietosuojaselosteeseen</h2>
+            <p>Pidätämme oikeuden päivittää tätä tietosuojaselostetta. Merkittävistä muutoksista ilmoitetaan verkkosivustollamme. Tarkista seloste säännöllisesti.</p>
+
+            <h2>12. Voimaantulo</h2>
+            <p>Tämä tietosuojaseloste on voimassa 26.5.2025 alkaen.</p>
+            <p><em>Laadittu EU:n yleisen tietosuoja-asetuksen (GDPR, asetus 2016/679) sekä tietosuojalain (1050/2018) mukaisesti.</em></p>
+        </div>
+    </div>
+    
+    <div class="footer">
+        &copy; 2025 Piha+. Kaikki oikeudet pidätetään.
+    </div>
+</body>
+</html>
